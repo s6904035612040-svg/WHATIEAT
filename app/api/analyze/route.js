@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { askGemini, READ_IMAGE_PROMPT } from "../../../lib/ai.mjs";
 import { todayBangkok, addDays } from "../../../lib/dates.mjs";
-export const maxDuration = 60; // รอ AI ได้นานสุด 60 วินาที (ค่าเริ่มต้นสั้นเกินไป)
-
 export const maxDuration = 60;
 
 // รับรูป (data URL) -> ส่งให้ AI -> คืนรายการ "ฉบับร่าง" ให้ผู้ใช้ตรวจแก้ก่อนบันทึก
