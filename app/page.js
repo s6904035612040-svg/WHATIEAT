@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const CATEGORIES = ["ผัก", "ผลไม้", "เนื้อสัตว์", "นม/ไข่", "เครื่องดื่ม", "ของแห้ง", "อื่นๆ"];
-const REFRESH_MS = 10000; // เพิ่ม: อัปเดตรายการอัตโนมัติทุก 10 วินาที
+const REFRESH_MS = 10000; // อัปเดตรายการอัตโนมัติทุก 10 วินาที
 
 function todayBangkok() {
   return new Date(Date.now() + 7 * 3600 * 1000).toISOString().slice(0, 10);
@@ -142,7 +142,7 @@ export default function Home() {
     }
   }
 
-  // เพิ่มพารามิเตอร์ silent: ตอนอัปเดตอัตโนมัติจะไม่ขึ้นข้อความ error ถ้าเน็ตสะดุด
+  // silent = true ตอนอัปเดตอัตโนมัติ จะไม่ขึ้นข้อความ error ถ้าเน็ตสะดุด
   async function load(silent = false) {
     try {
       const data = await api("/api/items");
@@ -157,13 +157,13 @@ export default function Home() {
     load();
   }, []);
 
-  // เพิ่ม: อัปเดตรายการอัตโนมัติทุก REFRESH_MS (หยุดเมื่อไม่ได้เปิดแท็บนี้)
+  // อัปเดตรายการอัตโนมัติ (หยุดเมื่อไม่ได้เปิดแท็บนี้ และดึงทันทีเมื่อกลับมา)
   useEffect(() => {
     const tick = () => {
       if (document.visibilityState === "visible") load(true);
     };
     const timer = setInterval(tick, REFRESH_MS);
-    document.addEventListener("visibilitychange", tick); // กลับมาที่แท็บนี้ดึงทันที
+    document.addEventListener("visibilitychange", tick);
     return () => {
       clearInterval(timer);
       document.removeEventListener("visibilitychange", tick);
@@ -344,4 +344,73 @@ export default function Home() {
                   type="number"
                   min="0"
                   value={d.price_thb}
-                  title="ราคา (บาท)"
+                  placeholder="ราคา"
+                  onChange={(e) => updateDraft(i, { price_thb: e.target.value })}
+                />
+                <button className="small danger" onClick={() => setDraft((x) => x.filter((_, k) => k !== i))}>
+                  ลบ
+                </button>
+              </div>
+            ))}
+            <div className="row" style={{ marginTop: 10 }}>
+              <button className="primary" onClick={saveDraft} disabled={busy === "save"}>
+                {busy === "save" ? "กำลังบันทึก..." : `บันทึก ${draft.length} รายการ`}
+              </button>
+              <button onClick={() => { setDraft([]); setPreview(null); }}>ยกเลิก</button>
+            </div>
+          </div>
+        )}
+      </section>
+
+      <section className="card">
+        <div className="row between" style={{ marginBottom: 12 }}>
+          <h2 style={{ margin: 0 }}>2. ของในตู้เย็น ({items.length})</h2>
+          <button className="primary" onClick={suggest} disabled={busy === "recipe" || !items.length}>
+            🍳 วันนี้กินอะไรดี
+          </button>
+        </div>
+
+        {busy === "recipe" && <div className="loading">🤓 รอครับบี๋ ตี๋กำลังไป...</div>}
+        {recipes && (
+          <div style={{ marginBottom: 16, background: "#00E5FF", borderRadius: 12, padding: "4px 12px" }}>
+            {recipes.map((r, i) => (
+              <div className="recipe" key={i}>
+                <h3>{r.title}</h3>
+                <div>
+                  {(r.uses || []).map((u) => <span className="tag" key={u}>{u}</span>)}
+                  {(r.missing || []).map((m) => <span className="tag miss" key={m}>ต้องซื้อ: {m}</span>)}
+                </div>
+                <div style={{ fontSize: 14, marginTop: 4 }}>{r.steps}</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {items.length === 0 && <div className="empty">ยังไม่มีของ ลองอัปโหลดรูปด้านบนได้เลย</div>}
+
+        {items.map((item) => {
+          const d = daysLeft(item.expiry_date);
+          return (
+            <div className={`item ${level(d)}`} key={item.id}>
+              <div className="info">
+                <div className="name">{item.name}</div>
+                <div className="meta">
+                  {[item.quantity, item.category, item.price_thb > 0 ? `฿${item.price_thb}` : null]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </div>
+              </div>
+              <div className="badge">{label(d)}</div>
+              <div className="row" style={{ gap: 4 }}>
+                <button className="small" onClick={() => setStatus(item.id, "eaten")} title="กินแล้ว">✅</button>
+                <button className="small" onClick={() => setStatus(item.id, "wasted")} title="ทิ้ง">🗑️</button>
+                <button className="small" onClick={() => editExpiry(item)} title="แก้วันหมดอายุ">✏️</button>
+                <button className="small" onClick={() => removeItem(item.id)} title="ลบ">❌</button>
+              </div>
+            </div>
+          );
+        })}
+      </section>
+    </main>
+  );
+}
