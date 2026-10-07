@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "../../../lib/supabase.mjs";
+import { notifyIfNearExpiry } from "../../../lib/telegram.mjs"; // เพิ่ม: แจ้ง Telegram ทันที
 
 export const dynamic = "force-dynamic";
 
@@ -63,6 +64,10 @@ export async function POST(req) {
     const db = getSupabase();
     const { data, error } = await db.from("items").insert(rows).select();
     if (error) throw error;
+
+    // เพิ่ม: ถ้ามีชิ้นที่ใกล้หมดอายุ ส่ง Telegram ทันที (ต้อง await ไม่งั้น Vercel ตัดก่อนส่ง)
+    await notifyIfNearExpiry(data);
+
     return NextResponse.json({ items: data });
   } catch (err) {
     return fail(err);
@@ -86,6 +91,12 @@ export async function PATCH(req) {
     const db = getSupabase();
     const { data, error } = await db.from("items").update(patch).eq("id", id).select().single();
     if (error) throw error;
+
+    // เพิ่ม: แก้วันหมดอายุของที่ยังอยู่ในตู้เย็น -> เช็คแล้วแจ้งทันที
+    if ("expiry_date" in patch && data.status === "active") {
+      await notifyIfNearExpiry([data]);
+    }
+
     return NextResponse.json({ item: data });
   } catch (err) {
     return fail(err);
