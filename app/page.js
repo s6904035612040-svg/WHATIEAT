@@ -249,8 +249,8 @@ export default function Home() {
 
   return (
     <main className="wrap">
-      <h1>🧊 ตู้เย็นอัจฉริยะ</h1>
-      <p className="sub">ถ่ายรูปของที่ซื้อมา ให้ AI บอกว่าอะไรจะหมดอายุก่อน จะได้ไม่ทิ้งของ</p>
+      <h1> WHATIEAT</h1>
+      <p className="sub">ข้าวทุกจาน อาหารทุกอย่าง อย่ากินทิ้งขว้าง เป็นของมีค่า ผู้คนอดอยาก มีมากหนักหนา สงสารบรรดา เด็กตาดำๆ</p>
 
       {error && <div className="err">{error}</div>}
 
@@ -278,7 +278,7 @@ export default function Home() {
             </div>
           ) : (
             <>
-              <div>ถ่ายรูปของที่ซื้อมา หรือรูปใบเสร็จ</div>
+              <div>ถ่ายรูปวัตถุดิบหรือใบเสร็จ</div>
               <div className="row" style={{ justifyContent: "center", marginTop: 12 }}>
                 <button className="primary" onClick={startCamera} disabled={busy === "analyze"}>
                   📷 เปิดกล้องสแกน
@@ -298,7 +298,7 @@ export default function Home() {
             </>
           )}
         </div>
-        {busy === "analyze" && <div className="loading">🤖 AI กำลังอ่านรูป รอสักครู่...</div>}
+        {busy === "analyze" && <div className="loading">🫪 รอครับโก๋ โบร๋กำลังมา...</div>}
 
         {draft.length > 0 && (
           <div style={{ marginTop: 16 }}>
@@ -355,9 +355,9 @@ export default function Home() {
           </button>
         </div>
 
-        {busy === "recipe" && <div className="loading">👨‍🍳 AI กำลังคิดเมนู...</div>}
+        {busy === "recipe" && <div className="loading">🤓 รอครับบี๋ ตี๋กำลังไป...</div>}
         {recipes && (
-          <div style={{ marginBottom: 16, background: "#f7faf8", borderRadius: 12, padding: "4px 12px" }}>
+          <div style={{ marginBottom: 16, background: "#00E5FF", borderRadius: 12, padding: "4px 12px" }}>
             {recipes.map((r, i) => (
               <div className="recipe" key={i}>
                 <h3>{r.title}</h3>
