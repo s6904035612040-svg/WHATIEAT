@@ -272,11 +272,11 @@ export default function Home() {
       <div className="stats">
         <div className="stat good">
           <b>฿{Math.round(stats.saved_thb).toLocaleString()}</b>
-          <span>ประหยัดได้ (กินทันก่อนหมดอายุ)</span>
+          <span>เย้! กินทันก่อนหมดอายุ</span>
         </div>
         <div className="stat bad">
           <b>฿{Math.round(stats.wasted_thb).toLocaleString()}</b>
-          <span>เสียไป (ต้องทิ้ง)</span>
+          <span>โห่! เสียดายจังต้องทิ้ง</span>
         </div>
       </div>
 
