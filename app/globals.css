@@ -1,15 +1,17 @@
 :root {
-  --bg: #00E5FF;
-  --card: #FF6B00;
-  --text: #000000;
-  --muted: #000000;
-  --line: #000000;
+  --bg: #00E5FF;          /* พื้นหลังเว็บ */
+  --card: #FF6B00;        /* พื้นหลังกล่อง (เปลี่ยนเป็น #ffffff ถ้าอยากได้กล่องขาว) */
+  --text: #000000;        /* ตัวอักษรดำสนิท */
+  --muted: #000000;       /* ตัวอักษรรอง ดำสนิทเช่นกัน */
+  --line: #000000;        /* เส้นขอบ */
+  --btn: #00E5FF;         /* สีปุ่ม: เปิดกล้องสแกน / อัปโหลดรูป / วันนี้กินอะไรดี */
+  --btn-hover: #00C8E0;   /* สีปุ่มตอนเอาเมาส์ชี้ */
   --green: #2e9e5b;
-  --green-bg: #22ff7b;
-  --yellow: #FFFF33;
+  --green-bg: #22ff7b;    /* กล่อง "กินทัน" และการ์ดของสถานะเขียว */
+  --yellow: #e6b800;
   --yellow-bg: #FFFF33;
-  --red: #d64545;
-  --red-bg: #ff1d9e;
+  --red: #d64545;         /* กล่อง "เสียดายต้องทิ้ง" */
+  --red-bg: #ff1d9e;      /* การ์ดของที่หมดอายุ */
   --primary: #00E5FF;
 }
 
@@ -25,40 +27,65 @@ body {
 
 .wrap { max-width: 720px; margin: 0 auto; padding: 20px 16px 80px; }
 
-h1 { font-size: 26px; margin: 8px 0 4px; }
-h2 { font-size: 18px; margin: 0 0 12px; }
-.sub { color: var(--muted); margin: 0 0 20px; }
+h1 { font-size: 26px; margin: 8px 0 4px; color: #000; }
+h2 { font-size: 18px; margin: 0 0 12px; color: #000; }
+.sub { color: #000; margin: 0 0 20px; }
 
 .card {
   background: var(--card);
-  border: 1px solid var(--line);
+  border: 1px solid #000;
   border-radius: 14px;
   padding: 16px;
   margin-bottom: 16px;
+  color: #000;
 }
 
 .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-.stat { border-radius: 14px; padding: 14px; }
-.stat b { display: block; font-size: 24px; }
-.stat span { font-size: 13px; color: var(--muted); }
-.stat.good { background: var(--green-bg); }
-.stat.bad { background: var(--red-bg); }
+.stat { border-radius: 14px; padding: 14px; color: #000; }
+.stat b { display: block; font-size: 24px; color: #000; }
+.stat span { font-size: 13px; color: #000; }
+.stat.good { background: #22ff7b; }
+.stat.bad { background: #d64545; }
 
+/* ปุ่มทั่วไป (เช่น ปุ่มไอคอนในการ์ดรายการ) */
 button {
   font: inherit;
   cursor: pointer;
-  border: 1px solid var(--line);
+  border: 1px solid #000;
   background: #fff;
-  color: var(--text);
+  color: #000;
   border-radius: 10px;
   padding: 8px 14px;
 }
-button:hover { background: #f0f4f2; }
+button:hover { background: #f0f0f0; }
 button:disabled { opacity: 0.5; cursor: not-allowed; }
-button.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
-button.primary:hover { background: #196640; }
 button.small { padding: 4px 10px; font-size: 13px; }
-button.danger { color: var(--red); }
+button.danger { color: #000; }
+
+/* ปุ่มหลักทั้งหมด (เปิดกล้องสแกน, วันนี้กินอะไรดี, บันทึก ฯลฯ) */
+button.primary {
+  background: var(--btn);
+  border-color: #000;
+  color: #000;
+  font-weight: 600;
+}
+button.primary:hover { background: var(--btn-hover); }
+
+/* ปุ่มในกล่องอัปโหลด (เปิดกล้องสแกน + อัปโหลดรูป) ให้เป็นสีเดียวกัน
+   ครอบคลุมกรณีที่ปุ่ม "อัปโหลดรูป" เป็น <label> */
+.upload button,
+.upload label {
+  display: inline-block;
+  background: var(--btn);
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.upload button:hover,
+.upload label:hover { background: var(--btn-hover); }
 
 .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .row.between { justify-content: space-between; }
@@ -66,18 +93,19 @@ button.danger { color: var(--red); }
 input[type="text"], input[type="number"], input[type="date"], select {
   font: inherit;
   padding: 7px 9px;
-  border: 1px solid var(--line);
+  border: 1px solid #000;
   border-radius: 8px;
   min-width: 0;
   background: #fff;
+  color: #000;
 }
 
 .upload {
-  border: 2px dashed var(--line);
+  border: 2px dashed #000;
   border-radius: 14px;
   padding: 22px;
   text-align: center;
-  color: var(--muted);
+  color: #000;
 }
 .camera {
   width: 100%;
@@ -88,8 +116,8 @@ input[type="text"], input[type="number"], input[type="date"], select {
 }
 .upload img { max-width: 100%; max-height: 220px; border-radius: 10px; margin-top: 12px; }
 
-.err { background: var(--red-bg); color: var(--red); padding: 10px 12px; border-radius: 10px; margin-bottom: 12px; }
-.loading { color: var(--muted); padding: 8px 0; }
+.err { background: var(--red-bg); color: #000; padding: 10px 12px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #000; }
+.loading { color: #000; padding: 8px 0; }
 
 .draft-item {
   display: grid;
@@ -98,7 +126,7 @@ input[type="text"], input[type="number"], input[type="date"], select {
   align-items: center;
   margin-bottom: 8px;
 }
-.draft-item .low { border-color: var(--yellow); background: var(--yellow-bg); }
+.draft-item .low { border-color: #000; background: var(--yellow-bg); }
 @media (max-width: 560px) {
   .draft-item { grid-template-columns: 1fr 1fr; }
 }
@@ -110,23 +138,24 @@ input[type="text"], input[type="number"], input[type="date"], select {
   padding: 12px;
   border-radius: 12px;
   margin-bottom: 8px;
-  border: 1px solid var(--line);
+  border: 1px solid #000;
   border-left-width: 6px;
+  color: #000;
 }
 .item.green { border-left-color: var(--green); background: var(--green-bg); }
 .item.yellow { border-left-color: var(--yellow); background: var(--yellow-bg); }
 .item.red { border-left-color: var(--red); background: var(--red-bg); }
 .item .info { flex: 1; min-width: 0; }
-.item .name { font-weight: 600; }
-.item .meta { font-size: 13px; color: var(--muted); }
-.badge { font-weight: 700; font-size: 14px; white-space: nowrap; }
-.green .badge { color: var(--green); }
-.yellow .badge { color: var(--yellow); }
-.red .badge { color: var(--red); }
+.item .name { font-weight: 600; color: #000; }
+.item .meta { font-size: 13px; color: #000; }
+.badge { font-weight: 700; font-size: 14px; white-space: nowrap; color: #000; }
+.green .badge,
+.yellow .badge,
+.red .badge { color: #000; }
 
-.recipe { border-top: 1px solid var(--line); padding: 12px 0; }
+.recipe { border-top: 1px solid #000; padding: 12px 0; color: #000; }
 .recipe:first-child { border-top: 0; }
-.recipe h3 { margin: 0 0 4px; font-size: 16px; }
-.tag { display: inline-block; font-size: 12px; background: var(--green-bg); color: var(--primary); border-radius: 20px; padding: 2px 10px; margin: 2px 4px 2px 0; }
-.tag.miss { background: var(--yellow-bg); color: var(--yellow); }
-.empty { color: var(--muted); text-align: center; padding: 24px 0; }
+.recipe h3 { margin: 0 0 4px; font-size: 16px; color: #000; }
+.tag { display: inline-block; font-size: 12px; background: var(--green-bg); color: #000; border-radius: 20px; padding: 2px 10px; margin: 2px 4px 2px 0; }
+.tag.miss { background: var(--yellow-bg); color: #000; }
+.empty { color: #000; text-align: center; padding: 24px 0; }
