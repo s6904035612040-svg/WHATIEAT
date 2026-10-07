@@ -45,7 +45,7 @@ h2 { font-size: 18px; margin: 0 0 12px; color: #000; }
 .stat b { display: block; font-size: 24px; color: #000; }
 .stat span { font-size: 13px; color: #000; }
 .stat.good { background: #22ff7b; }
-.stat.bad { background: #d64545; }
+.stat.bad { background: #ff2E9A; }
 
 /* ปุ่มทั่วไป (เช่น ปุ่มไอคอนในการ์ดรายการ) */
 button {
