@@ -2,10 +2,8 @@ name: Daily fridge notification
 
 on:
   schedule:
-    # 07:00 เวลาไทย = 00:00 UTC (GitHub อาจเลื่อนเวลาได้ไม่กี่นาที)
-    - cron: "0 0 * * *"
-  # ปุ่มกดรันเองในแท็บ Actions ใช้ตอนอัดคลิปเดโม
-  workflow_dispatch:
+    - cron: "0 0 * * *"   # 00:00 UTC = 07:00 เวลาไทย
+  workflow_dispatch: {}    # ปุ่ม Run workflow กดรันเองได้
 
 jobs:
   notify:
@@ -17,13 +15,16 @@ jobs:
         with:
           node-version: 20
 
-      - run: npm ci || npm install
+      - name: Install packages
+        run: npm install
 
-      - run: node scripts/notify.mjs
+      - name: Run notify
+        run: node scripts/notify.mjs
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: gemini-1.5-flash
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          # ชื่อรุ่นอ่านจาก Variables ของ repo ไม่ต้องแก้ไฟล์นี้อีก
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
